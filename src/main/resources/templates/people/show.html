@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Person</title>
+</head>
+<body>
+<p th:text="${person.getFullName() + ', ' + person.getYearOfBirth()}">VALUE</p>
+<div th:if="${books}">
+    <hr>
+    <b>Книги взяты: </b>
+    <myTeg th:each="book : ${books}">
+        <br>
+        <a th:href="@{/books/{id}(id=${book.getBookId()})}"
+           th:style="${book.isOverdue()} ? 'color: red' : 'color: black'"
+           th:text="${book.getName() + ', ' + book.getAuthor() + ', ' + book.getYear()}">books</a>
+    </myTeg>
+</div>
+<div th:if="${noBooks}">
+    <b>"Человек пока не взял ни одной книги"</b>
+</div>
+<hr>
+<br/>
+<form th:method="GET" th:action="@{/books/}">
+    <input type="submit" value="Выбрать книгу"/>
+</form>
+<br>
+<form th:method="GET" th:action="@{/people/{id}/edit(id=${person.getId()})}">
+    <input type="submit" value="Редактировать"/>
+</form>
+<br>
+<form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
+    <input type="submit" value="Удалить"/>
+</form>
+<br>
+<form th:method="GET" th:action="@{/people/}">
+    <input type="submit" value="Вернуться"/>
+</form>
+
+<br>
+<br>
+
+<div>
+    <span>Добавить книгу</span>
+    <form th:method="PATCH" th:action="@{/books/{id}/newassign(id=${person.getId()})}">
+        <label for="book">Выберете книгу:</label>
+        <select th:object="${book}" th:field="*{bookId}" id="book">
+            <option th:each="b : ${booksToAdd}" th:value="${b.getBookId()}" th:text="${b.getName()}">
+            </option>
+        </select>
+        <input type="submit" value="Выдать книгу">
+    </form>
+</div>
+
+</body>
+</html>
