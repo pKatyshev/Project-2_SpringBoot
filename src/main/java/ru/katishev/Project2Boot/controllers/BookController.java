@@ -34,10 +34,7 @@ public class BookController {
                         @RequestParam(value = "books_per_page", required = false) String booksPerPage,
                         @RequestParam(value = "sort_by_year", required = false) String sort) {
 
-        boolean isSort = false;
-        if (sort != null && sort.equals("true")) {
-            isSort = true;
-        }
+        boolean isSort = sort != null && sort.equals("true");
 
         List<Book> books;
         if (page != null && booksPerPage != null && isSort) {
@@ -90,10 +87,6 @@ public class BookController {
     @PatchMapping("{id}/assign")
     public String assign(@PathVariable("id") int bookId,
                          @ModelAttribute("person") Person person) {
-        Person p = peopleService.findOne(person.getId());
-        Book book = booksService.findOne(bookId);
-        System.out.println("Книга " + book.getName());
-        System.out.println("Человек " + p.getFullName());
         booksService.assign(bookId, person.getId());
         return "redirect:/books/" + bookId;
     }
@@ -108,8 +101,6 @@ public class BookController {
 
         booksService.assign(b.getBookId(), personId);
 
-        System.out.println(personId);
-        System.out.println(b.getBookId());
         return "redirect:/people/" + personId;
     }
 

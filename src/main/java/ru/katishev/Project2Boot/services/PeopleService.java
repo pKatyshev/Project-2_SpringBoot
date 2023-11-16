@@ -6,6 +6,7 @@ import ru.katishev.Project2Boot.models.Book;
 import ru.katishev.Project2Boot.models.Person;
 import ru.katishev.Project2Boot.repositories.BooksRepository;
 import ru.katishev.Project2Boot.repositories.PeopleRepository;
+import ru.katishev.Project2Boot.util.Content;
 
 import java.util.Date;
 import java.util.List;
@@ -13,8 +14,8 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 public class PeopleService {
-    private PeopleRepository peopleRepository;
-    private BooksRepository booksRepository;
+    private final PeopleRepository peopleRepository;
+    private final BooksRepository booksRepository;
 
     public PeopleService(PeopleRepository peopleRepository, BooksRepository booksRepository) {
         this.peopleRepository = peopleRepository;
@@ -26,7 +27,7 @@ public class PeopleService {
     }
 
     public Person findOne(int id) {
-        return peopleRepository.findById(id).orElse(null);
+        return peopleRepository.findById(id).orElse(new Person());
     }
 
     @Transactional
@@ -54,7 +55,7 @@ public class PeopleService {
 
                 long diff =  new Date().getTime() - book.getDateOfAssign().getTime();
 
-                if (diff > 864000000) {
+                if (diff > Content.tenDaysMillis) {
                     book.setOverdue(true);
                 }
             }

@@ -26,7 +26,7 @@ public class BookValidator implements Validator{
         Book book = (Book) o;
 
         if (bookDAO.show(book.getName()).isPresent()) {
-            errors.rejectValue("name", "", "Такая книга уже есть в базе");
+            errors.rejectValue("name", "", Content.bookAlreadyExist);
         }
 
     }

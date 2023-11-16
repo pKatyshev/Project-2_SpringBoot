@@ -17,8 +17,8 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 public class BooksService {
-    private BooksRepository booksRepository;
-    private PeopleRepository peopleRepository;
+    private final BooksRepository booksRepository;
+    private final PeopleRepository peopleRepository;
 
     public BooksService(BooksRepository booksRepository, PeopleRepository peopleRepository) {
         this.booksRepository = booksRepository;
@@ -50,13 +50,13 @@ public class BooksService {
     }
 
     public Optional<Person> getBookOwner(int id) {
-        Book book = booksRepository.findById(id).orElse(null);
+        Book book = booksRepository.findById(id).orElse(new Book());
         return Optional.ofNullable(book.getOwner());
     }
 
     @Transactional
     public void assign(int bookId, int id) {
-        Book book = booksRepository.findById(bookId).orElse(null);
+        Book book = booksRepository.findById(bookId).orElse(new Book());
         Person newOwner = peopleRepository.findById(id).orElse(null);
 
         book.setDateOfAssign(new Date());
@@ -65,10 +65,9 @@ public class BooksService {
 
     @Transactional
     public void release(int id) {
-        Book book = booksRepository.findById(id).orElse(null);
+        Book book = booksRepository.findById(id).orElse(new Book());
         book.setDateOfAssign(null);
         book.setOwner(null);
-        System.out.println("IT WORKS!!!");
     }
 
     public List<Book> getBooksPerPage(String page, String booksPerPage) {

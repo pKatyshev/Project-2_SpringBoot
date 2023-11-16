@@ -27,7 +27,7 @@ public class PersonValidator implements Validator {
 
         if (personDAO.showOnName(person.getFullName()).isPresent()) {
             if (personDAO.showOnYear(person.getYearOfBirth()).isPresent()) {
-                errors.rejectValue("fullName", "", "Полный тёзка");
+                errors.rejectValue("fullName", "", Content.personAlreadyExist);
             }
         }
     }
